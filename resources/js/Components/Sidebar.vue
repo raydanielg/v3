@@ -171,6 +171,14 @@ const adminNavigation = [
             { name: 'All Districts', href: route('admin.districts') },
         ],
     },
+    {
+        name: 'Profile',
+        icon: 'account_circle',
+        submenu: [
+            { name: 'My Profile', href: route('profile.show') },
+            { name: 'Account Settings', href: route('profile.show') },
+        ],
+    },
 ];
 
 const schoolManagerNavigation = [
