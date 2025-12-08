@@ -165,6 +165,127 @@ const adminNavigation = [
     },
 ];
 
+const schoolManagerNavigation = [
+    {
+        name: 'Dashboard',
+        icon: 'dashboard',
+        submenu: [
+            { name: 'Overview', href: route('dashboard') },
+            { name: 'School Statistics', href: route('dashboard') },
+            { name: 'Recent Activities', href: route('dashboard') },
+        ],
+    },
+    {
+        name: 'Teachers',
+        icon: 'person_4',
+        submenu: [
+            { name: 'All Teachers', href: route('dashboard') },
+            { name: 'Add Teacher', href: route('dashboard') },
+            { name: 'Teacher Reports', href: route('dashboard') },
+        ],
+    },
+    {
+        name: 'Students',
+        icon: 'groups',
+        submenu: [
+            { name: 'All Students', href: route('dashboard') },
+            { name: 'Add Student', href: route('dashboard') },
+            { name: 'Student Reports', href: route('dashboard') },
+        ],
+    },
+    {
+        name: 'Exams',
+        icon: 'assignment',
+        submenu: [
+            { name: 'All Exams', href: route('dashboard') },
+            { name: 'Create Exam', href: route('dashboard') },
+            { name: 'Exam Schedule', href: route('dashboard') },
+        ],
+    },
+    {
+        name: 'Results',
+        icon: 'assessment',
+        submenu: [
+            { name: 'View Results', href: route('dashboard') },
+            { name: 'Result Analysis', href: route('dashboard') },
+            { name: 'Export Results', href: route('dashboard') },
+        ],
+    },
+    {
+        name: 'Reports',
+        icon: 'description',
+        submenu: [
+            { name: 'Academic Reports', href: route('dashboard') },
+            { name: 'Performance Reports', href: route('dashboard') },
+            { name: 'Attendance Reports', href: route('dashboard') },
+        ],
+    },
+    {
+        name: 'Profile',
+        icon: 'account_circle',
+        submenu: [
+            { name: 'My Profile', href: route('profile.show') },
+            { name: 'Account Settings', href: route('profile.show') },
+        ],
+    },
+];
+
+const districtManagerNavigation = [
+    {
+        name: 'Dashboard',
+        icon: 'dashboard',
+        submenu: [
+            { name: 'Overview', href: route('dashboard') },
+            { name: 'District Statistics', href: route('dashboard') },
+            { name: 'Recent Activities', href: route('dashboard') },
+        ],
+    },
+    {
+        name: 'Schools',
+        icon: 'domain',
+        submenu: [
+            { name: 'All Schools', href: route('dashboard') },
+            { name: 'School Performance', href: route('dashboard') },
+            { name: 'School Reports', href: route('dashboard') },
+        ],
+    },
+    {
+        name: 'Teachers',
+        icon: 'person_4',
+        submenu: [
+            { name: 'All Teachers', href: route('dashboard') },
+            { name: 'Teacher Performance', href: route('dashboard') },
+            { name: 'Teacher Reports', href: route('dashboard') },
+        ],
+    },
+    {
+        name: 'Exams',
+        icon: 'assignment',
+        submenu: [
+            { name: 'All Exams', href: route('dashboard') },
+            { name: 'Exam Analysis', href: route('dashboard') },
+            { name: 'Exam Reports', href: route('dashboard') },
+        ],
+    },
+    {
+        name: 'Reports',
+        icon: 'description',
+        submenu: [
+            { name: 'District Reports', href: route('dashboard') },
+            { name: 'Performance Analytics', href: route('dashboard') },
+            { name: 'Comparative Analysis', href: route('dashboard') },
+        ],
+    },
+    {
+        name: 'Profile',
+        icon: 'account_circle',
+        submenu: [
+            { name: 'My Profile', href: route('profile.show') },
+            { name: 'Account Settings', href: route('profile.show') },
+        ],
+    },
+];
+
 const currentNavigation = computed(() => isAdmin.value ? adminNavigation : navigation);
 
 const toggleMenu = (index) => {

@@ -138,9 +138,10 @@ watch(() => form.errors, (newErrors) => {
                     class="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all"
                 >
                     <option value="admin">Admin</option>
-                    <option value="teacher">Teacher</option>
-                    <option value="student">Student</option>
-                    <option value="principal">Principal</option>
+                    <option value="teacher">Mwalimu (Teacher)</option>
+                    <option value="school_manager">Mkuu wa Shule (School Manager)</option>
+                    <option value="district_manager">Msimamizi wa Kiti (District Manager)</option>
+                    <option value="student">Mwanafunzi (Student)</option>
                 </select>
                 <InputError v-if="form.errors.role" class="mt-2" :message="form.errors.role" />
             </div>

@@ -25,13 +25,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ]);
     })->name('admin.dashboard');
 
-    // User Dashboard
+    // User Dashboard - for school_manager, district_manager, teacher, student
     Route::get('/dashboard', function () {
-        if (auth()->user()->role === 'admin') {
+        $user = auth()->user();
+        
+        // Only admin goes to admin dashboard
+        if ($user->role === 'admin') {
             return redirect()->route('admin.dashboard');
         }
+        
+        // All other roles (school_manager, district_manager, teacher, student) use regular dashboard
         return Inertia::render('Dashboard', [
-            'user' => auth()->user(),
+            'user' => $user,
         ]);
     })->name('dashboard');
 });

@@ -36,7 +36,6 @@ class AdminUserSeeder extends Seeder
             ['email' => 'john@example.com'],
             [
             'name' => 'John Teacher',
-            'email' => 'john@example.com',
             'password' => Hash::make('password123'),
             'email_verified_at' => now(),
             'phone' => '+255 700 111 222',
@@ -70,7 +69,7 @@ class AdminUserSeeder extends Seeder
         User::firstOrCreate(
             ['email' => 'mike@example.com'],
             [
-            'name' => 'Mike Principal',
+            'name' => 'Mike School Manager',
             'password' => Hash::make('password123'),
             'email_verified_at' => now(),
             'phone' => '+255 700 333 444',
@@ -78,7 +77,24 @@ class AdminUserSeeder extends Seeder
             'address' => 'Dar es Salaam, Tanzania',
             'school_name' => 'Emas School',
             'school_id' => 'SCH-2024-001',
-            'role' => 'principal',
+            'role' => 'school_manager',
+            'avatar_url' => null,
+            'last_login_at' => now(),
+            ]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'david@example.com'],
+            [
+            'name' => 'David District Manager',
+            'password' => Hash::make('password123'),
+            'email_verified_at' => now(),
+            'phone' => '+255 700 444 555',
+            'date_of_birth' => '1978-07-22',
+            'address' => 'Dar es Salaam, Tanzania',
+            'school_name' => 'District Office',
+            'school_id' => 'DIST-2024-001',
+            'role' => 'district_manager',
             'avatar_url' => null,
             'last_login_at' => now(),
             ]
