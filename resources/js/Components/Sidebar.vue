@@ -1,6 +1,6 @@
 <script setup>
-import { ref } from 'vue';
-import { Link } from '@inertiajs/vue3';
+import { ref, computed } from 'vue';
+import { Link, usePage } from '@inertiajs/vue3';
 
 const props = defineProps({
     open: {
@@ -11,7 +11,10 @@ const props = defineProps({
 
 const emit = defineEmits(['toggle']);
 
+const page = usePage();
 const expandedMenus = ref({});
+
+const isAdmin = computed(() => page.props.auth.user?.role === 'admin');
 
 const navigation = [
     {
@@ -108,12 +111,61 @@ const navigation = [
         name: 'Profile',
         icon: 'account_circle',
         submenu: [
-            { name: 'My Profile', href: route('dashboard') },
-            { name: 'Edit Profile', href: route('dashboard') },
-            { name: 'Change Password', href: route('dashboard') },
+            { name: 'My Profile', href: route('profile.show') },
+            { name: 'Account Settings', href: route('profile.show') },
         ],
     },
 ];
+
+const adminNavigation = [
+    {
+        name: 'Admin Dashboard',
+        icon: 'admin_panel_settings',
+        submenu: [
+            { name: 'Overview', href: route('admin.dashboard') },
+            { name: 'System Health', href: route('admin.dashboard') },
+            { name: 'Activity Log', href: route('admin.dashboard') },
+        ],
+    },
+    {
+        name: 'User Management',
+        icon: 'manage_accounts',
+        submenu: [
+            { name: 'All Users', href: route('admin.dashboard') },
+            { name: 'Add User', href: route('admin.dashboard') },
+            { name: 'User Roles', href: route('admin.dashboard') },
+        ],
+    },
+    {
+        name: 'School Management',
+        icon: 'domain',
+        submenu: [
+            { name: 'All Schools', href: route('admin.dashboard') },
+            { name: 'Add School', href: route('admin.dashboard') },
+            { name: 'School Reports', href: route('admin.dashboard') },
+        ],
+    },
+    {
+        name: 'System Settings',
+        icon: 'settings',
+        submenu: [
+            { name: 'General Settings', href: route('admin.dashboard') },
+            { name: 'Security', href: route('admin.dashboard') },
+            { name: 'Backup & Restore', href: route('admin.dashboard') },
+        ],
+    },
+    {
+        name: 'Reports',
+        icon: 'description',
+        submenu: [
+            { name: 'System Reports', href: route('admin.dashboard') },
+            { name: 'User Analytics', href: route('admin.dashboard') },
+            { name: 'Exam Statistics', href: route('admin.dashboard') },
+        ],
+    },
+];
+
+const currentNavigation = computed(() => isAdmin.value ? adminNavigation : navigation);
 
 const toggleMenu = (index) => {
     expandedMenus.value[index] = !expandedMenus.value[index];
@@ -157,7 +209,7 @@ const closeSidebar = () => {
             <div class="px-3 py-2 text-xs font-semibold text-emerald-200 uppercase tracking-wider">
                 Navigation
             </div>
-            <template v-for="(item, index) in navigation" :key="item.name">
+            <template v-for="(item, index) in currentNavigation" :key="item.name">
                 <button
                     @click="toggleMenu(index)"
                     :class="[

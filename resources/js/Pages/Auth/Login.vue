@@ -74,6 +74,19 @@ watch(() => form.errors, (newErrors) => {
                 {{ status }}
             </div>
 
+            <!-- Demo Credentials Info -->
+            <div class="mb-6 p-4 rounded-lg bg-blue-50 border border-blue-200">
+                <p class="text-xs font-semibold text-blue-900 mb-2 flex items-center gap-2">
+                    <span class="material-icons text-sm">info</span>
+                    Demo Credentials
+                </p>
+                <div class="space-y-1 text-xs text-blue-800">
+                    <p><strong>Admin:</strong> airezra2@gmail.com / 12345678</p>
+                    <p><strong>Teacher:</strong> john@example.com / password123</p>
+                    <p><strong>Student:</strong> jane@example.com / password123</p>
+                </div>
+            </div>
+
             <!-- Social auth placeholders -->
             <div class="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <button

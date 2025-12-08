@@ -13,6 +13,7 @@ const form = useForm({
     email: '',
     password: '',
     password_confirmation: '',
+    role: 'admin',
 });
 
 const toastMessage = ref('');
@@ -124,11 +125,24 @@ watch(() => form.errors, (newErrors) => {
                         autocomplete="new-password"
                     />
 
-                    <InputError
-                        class="mt-2"
-                        :message="form.errors.password_confirmation"
-                    />
+                    <InputError v-if="form.errors.password_confirmation" class="mt-2" :message="form.errors.password_confirmation" />
                 </div>
+            </div>
+
+            <!-- Role Selection -->
+            <div>
+                <InputLabel for="role" value="Role" />
+                <select
+                    id="role"
+                    v-model="form.role"
+                    class="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all"
+                >
+                    <option value="admin">Admin</option>
+                    <option value="teacher">Teacher</option>
+                    <option value="student">Student</option>
+                    <option value="principal">Principal</option>
+                </select>
+                <InputError v-if="form.errors.role" class="mt-2" :message="form.errors.role" />
             </div>
 
             <div class="pt-2 space-y-4">
