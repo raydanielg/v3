@@ -163,6 +163,14 @@ const adminNavigation = [
             { name: 'Exam Statistics', href: route('admin.dashboard') },
         ],
     },
+    {
+        name: 'Geographical',
+        icon: 'public',
+        submenu: [
+            { name: 'All Regions', href: route('admin.regions') },
+            { name: 'All Districts', href: route('admin.districts') },
+        ],
+    },
 ];
 
 const schoolManagerNavigation = [
@@ -286,7 +294,20 @@ const districtManagerNavigation = [
     },
 ];
 
-const currentNavigation = computed(() => isAdmin.value ? adminNavigation : navigation);
+const currentNavigation = computed(() => {
+    const userRole = page.props.auth.user?.role;
+    
+    if (userRole === 'admin') {
+        return adminNavigation;
+    } else if (userRole === 'school_manager') {
+        return schoolManagerNavigation;
+    } else if (userRole === 'district_manager') {
+        return districtManagerNavigation;
+    } else {
+        // For teacher and student
+        return navigation;
+    }
+});
 
 const toggleMenu = (index) => {
     expandedMenus.value[index] = !expandedMenus.value[index];

@@ -91,6 +91,10 @@ const toggleUserMenu = () => {
                                     <div class="px-4 py-3 border-b border-gray-200">
                                         <p class="text-sm font-medium text-gray-900">{{ page.props.auth.user.name }}</p>
                                         <p class="text-xs text-gray-500">{{ page.props.auth.user.email }}</p>
+                                        <div class="mt-2 inline-flex items-center gap-1 px-2 py-1 bg-emerald-100 rounded text-xs font-medium text-emerald-800 capitalize">
+                                            <span class="material-icons text-sm">verified_user</span>
+                                            {{ page.props.auth.user.role === 'school_manager' ? 'Mkuu wa Shule' : page.props.auth.user.role === 'district_manager' ? 'Msimamizi wa Kiti' : page.props.auth.user.role === 'teacher' ? 'Mwalimu' : page.props.auth.user.role === 'student' ? 'Mwanafunzi' : 'Admin' }}
+                                        </div>
                                     </div>
                                     <Link
                                         :href="route('profile.show')"
