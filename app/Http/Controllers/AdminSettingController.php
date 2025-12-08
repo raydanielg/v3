@@ -122,9 +122,20 @@ class AdminSettingController extends Controller
         // Backups total size
         $backupsSize = Backup::sum('size');
 
-        // Monthly usage from backups (last 6 months)
+        // Monthly usage from backups (last 6 months) - portable between SQLite/MySQL
+        $driver = DB::connection()->getDriverName();
+
+        if ($driver === 'mysql') {
+            $monthExpression = "DATE_FORMAT(created_at, '%Y-%m')";
+        } elseif ($driver === 'pgsql') {
+            $monthExpression = "TO_CHAR(created_at, 'YYYY-MM')";
+        } else {
+            // Default to SQLite style
+            $monthExpression = "strftime('%Y-%m', created_at)";
+        }
+
         $monthlyUsage = DB::table('backups')
-            ->select(DB::raw("strftime('%Y-%m', created_at) as month"), DB::raw('SUM(size) as total_size'))
+            ->select(DB::raw($monthExpression . ' as month'), DB::raw('SUM(size) as total_size'))
             ->groupBy('month')
             ->orderBy('month')
             ->limit(6)
