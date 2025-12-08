@@ -244,20 +244,22 @@ const submitAddRegion = () => {
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-sm">
-                                <div class="flex items-center gap-2">
+                                <div class="flex items-center gap-2 justify-end">
                                     <button
                                         @click="openEditModal(region)"
-                                        class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                                        class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-blue-600 bg-blue-50/60 hover:bg-blue-100 rounded-full transition-colors"
+                                        title="Edit region"
                                     >
-                                        <span class="material-icons text-sm">edit</span>
-                                        Edit
+                                        <span class="material-icons text-sm">edit_note</span>
+                                        <span>Edit</span>
                                     </button>
                                     <button
                                         @click="openDeleteModal(region)"
-                                        class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50 rounded transition-colors"
+                                        class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50/60 hover:bg-red-100 rounded-full transition-colors"
+                                        title="Delete region"
                                     >
-                                        <span class="material-icons text-sm">delete</span>
-                                        Delete
+                                        <span class="material-icons text-sm">delete_outline</span>
+                                        <span>Delete</span>
                                     </button>
                                 </div>
                             </td>

@@ -244,20 +244,22 @@ const submitAddDistrict = () => {
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-sm">
-                                <div class="flex items-center gap-2">
+                                <div class="flex items-center gap-2 justify-end">
                                     <button
                                         @click="openEditModal(district)"
-                                        class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                                        class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-blue-600 bg-blue-50/60 hover:bg-blue-100 rounded-full transition-colors"
+                                        title="Edit district"
                                     >
-                                        <span class="material-icons text-sm">edit</span>
-                                        Edit
+                                        <span class="material-icons text-sm">edit_note</span>
+                                        <span>Edit</span>
                                     </button>
                                     <button
                                         @click="openDeleteModal(district)"
-                                        class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50 rounded transition-colors"
+                                        class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50/60 hover:bg-red-100 rounded-full transition-colors"
+                                        title="Delete district"
                                     >
-                                        <span class="material-icons text-sm">delete</span>
-                                        Delete
+                                        <span class="material-icons text-sm">delete_outline</span>
+                                        <span>Delete</span>
                                     </button>
                                 </div>
                             </td>
@@ -453,19 +455,18 @@ const submitAddDistrict = () => {
                             <label class="block text-sm font-medium text-gray-700 mb-1">Region</label>
                             <select v-model="formData.region_id" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
                                 <option value="">Select a region...</option>
+                                <option
+                                    v-for="region in regions"
+                                    :key="region.id"
+                                    :value="region.id"
+                                >
+                                    {{ region.name }} ({{ region.code }})
+                                </option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">District Name</label>
                             <input v-model="formData.name" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Code</label>
-                            <input v-model="formData.code" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                            <textarea v-model="formData.description" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent" rows="3"></textarea>
                         </div>
                     </div>
                     <div class="flex gap-3 border-t border-gray-200 px-6 py-4">

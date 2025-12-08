@@ -10,6 +10,7 @@ class District extends Model
     protected $fillable = [
         'region_id',
         'name',
+        'code',
     ];
 
     public function region(): BelongsTo

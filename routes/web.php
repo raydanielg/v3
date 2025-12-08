@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GeographicalController;
+use App\Http\Controllers\AdminUserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -48,7 +49,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Admin Geographical Management Routes
+// Admin Management Routes
 Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     // Regions
     Route::get('/regions', [GeographicalController::class, 'regions'])->name('admin.regions');
@@ -61,6 +62,12 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     Route::post('/districts', [GeographicalController::class, 'storeDistrict'])->name('admin.districts.store');
     Route::patch('/districts/{district}', [GeographicalController::class, 'updateDistrict'])->name('admin.districts.update');
     Route::delete('/districts/{district}', [GeographicalController::class, 'deleteDistrict'])->name('admin.districts.delete');
+
+    // Users
+    Route::get('/users', [AdminUserController::class, 'index'])->name('admin.users.index');
+    Route::post('/users', [AdminUserController::class, 'store'])->name('admin.users.store');
+    Route::patch('/users/{user}', [AdminUserController::class, 'update'])->name('admin.users.update');
+    Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
 });
 
 require __DIR__.'/auth.php';

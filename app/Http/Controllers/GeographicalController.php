@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Region;
 use App\Models\District;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class GeographicalController extends Controller
@@ -91,7 +92,11 @@ class GeographicalController extends Controller
             'name' => 'required|string',
         ]);
 
-        District::create($validated);
+        $data = $validated;
+        // Auto-generate a unique internal code so the NOT NULL/UNIQUE constraint on districts.code is satisfied
+        $data['code'] = Str::uuid()->toString();
+
+        District::create($data);
 
         return redirect()->route('admin.districts')->with('success', 'District created successfully');
     }

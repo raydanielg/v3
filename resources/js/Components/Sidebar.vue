@@ -131,9 +131,9 @@ const adminNavigation = [
         name: 'User Management',
         icon: 'manage_accounts',
         submenu: [
-            { name: 'All Users', href: route('admin.dashboard') },
-            { name: 'Add User', href: route('admin.dashboard') },
-            { name: 'User Roles', href: route('admin.dashboard') },
+            { name: 'All Users', href: route('admin.users.index') },
+            { name: 'Add User', href: route('admin.users.index') },
+            { name: 'User Roles', href: route('admin.users.index') },
         ],
     },
     {
