@@ -27,9 +27,11 @@ class GeographicalController extends Controller
     public function districts()
     {
         $districts = District::with('region')->get();
-        
+        $regions = Region::all();
+
         return Inertia::render('Admin/Geographical/Districts', [
             'districts' => $districts,
+            'regions' => $regions,
         ]);
     }
 
@@ -87,10 +89,6 @@ class GeographicalController extends Controller
         $validated = $request->validate([
             'region_id' => 'required|exists:regions,id',
             'name' => 'required|string',
-            'code' => 'required|string|unique:districts',
-            'description' => 'nullable|string',
-            'population' => 'nullable|integer',
-            'headquarters' => 'nullable|string',
         ]);
 
         District::create($validated);
@@ -106,10 +104,6 @@ class GeographicalController extends Controller
         $validated = $request->validate([
             'region_id' => 'required|exists:regions,id',
             'name' => 'required|string',
-            'code' => 'required|string|unique:districts,code,' . $district->id,
-            'description' => 'nullable|string',
-            'population' => 'nullable|integer',
-            'headquarters' => 'nullable|string',
         ]);
 
         $district->update($validated);
