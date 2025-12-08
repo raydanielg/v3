@@ -2,7 +2,7 @@
 import DashboardLayout from '@/Layouts/DashboardLayout.vue';
 import Toast from '@/Components/Toast.vue';
 import { Head, router } from '@inertiajs/vue3';
-import { ref, toRefs } from 'vue';
+import { ref, toRefs, computed } from 'vue';
 
 const props = defineProps({
     users: {
@@ -22,6 +22,12 @@ const showEditModal = ref(false);
 const showDeleteModal = ref(false);
 const selectedUser = ref(null);
 const isSubmitting = ref(false);
+
+const selectedUsers = ref([]);
+
+const nameFilter = ref('');
+const emailFilter = ref('');
+const roleFilter = ref('');
 
 const toastMessage = ref('');
 const toastType = ref('success');
@@ -145,6 +151,64 @@ const confirmDeleteUser = () => {
         },
     });
 };
+
+const filteredUsers = computed(() => {
+    return users.value.filter((user) => {
+        const matchesName = nameFilter.value
+            ? user.name.toLowerCase().includes(nameFilter.value.toLowerCase())
+            : true;
+        const matchesEmail = emailFilter.value
+            ? user.email.toLowerCase().includes(emailFilter.value.toLowerCase())
+            : true;
+        const matchesRole = roleFilter.value
+            ? (user.role || '').toLowerCase() === roleFilter.value.toLowerCase()
+            : true;
+
+        return matchesName && matchesEmail && matchesRole;
+    });
+});
+
+const toggleSelectAll = (event) => {
+    if (event.target.checked) {
+        selectedUsers.value = filteredUsers.value.map((u) => u.id);
+    } else {
+        selectedUsers.value = [];
+    }
+};
+
+const toggleUserSelect = (userId) => {
+    const index = selectedUsers.value.indexOf(userId);
+    if (index > -1) {
+        selectedUsers.value.splice(index, 1);
+    } else {
+        selectedUsers.value.push(userId);
+    }
+};
+
+const bulkDeleteUsers = () => {
+    if (!selectedUsers.value.length) {
+        showToastMessage('Please select users to delete.', 'warning');
+        return;
+    }
+
+    isSubmitting.value = true;
+
+    router.delete(route('admin.users.bulk-destroy'), {
+        ids: selectedUsers.value,
+    }, {
+        preserveScroll: true,
+        onSuccess: () => {
+            showToastMessage('Selected users deleted successfully.', 'success');
+            selectedUsers.value = [];
+        },
+        onError: () => {
+            showToastMessage('Failed to delete selected users.', 'error');
+        },
+        onFinish: () => {
+            isSubmitting.value = false;
+        },
+    });
+};
 </script>
 
 <template>
@@ -174,12 +238,72 @@ const confirmDeleteUser = () => {
             </button>
         </div>
 
+        <!-- Filters -->
+        <div class="mb-4 grid gap-3 sm:grid-cols-3">
+            <div>
+                <label class="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-1">Filter by Name</label>
+                <input
+                    v-model="nameFilter"
+                    type="text"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm"
+                    placeholder="Search name..."
+                >
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-1">Filter by Email</label>
+                <input
+                    v-model="emailFilter"
+                    type="text"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm"
+                    placeholder="Search email..."
+                >
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-1">Filter by Role</label>
+                <select
+                    v-model="roleFilter"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm"
+                >
+                    <option value="">All Roles</option>
+                    <option v-for="role in roles" :key="role" :value="role">
+                        {{ role }}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Bulk Actions Bar -->
+        <div
+            v-if="selectedUsers.length > 0"
+            class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-center justify-between"
+        >
+            <div class="flex items-center gap-2 text-sm text-blue-900">
+                <span class="material-icons text-base text-blue-600">info</span>
+                <span>{{ selectedUsers.length }} user(s) selected</span>
+            </div>
+            <button
+                @click="bulkDeleteUsers"
+                class="inline-flex items-center gap-2 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-medium rounded-lg transition-colors"
+            >
+                <span class="material-icons text-sm">delete_sweep</span>
+                <span>Delete Selected</span>
+            </button>
+        </div>
+
         <!-- Users Table -->
         <div class="rounded-lg bg-white shadow-sm border border-gray-200 overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead class="bg-gray-50 border-b border-gray-200">
                         <tr>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                                <input
+                                    type="checkbox"
+                                    @change="toggleSelectAll"
+                                    :checked="selectedUsers.length === filteredUsers.length && filteredUsers.length > 0"
+                                    class="rounded border-gray-300"
+                                >
+                            </th>
                             <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Name</th>
                             <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Email</th>
                             <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Role</th>
@@ -188,7 +312,15 @@ const confirmDeleteUser = () => {
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
-                        <tr v-for="user in users" :key="user.id" class="hover:bg-gray-50 transition-colors">
+                        <tr v-for="user in filteredUsers" :key="user.id" class="hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 text-sm">
+                                <input
+                                    type="checkbox"
+                                    :checked="selectedUsers.includes(user.id)"
+                                    @change="toggleUserSelect(user.id)"
+                                    class="rounded border-gray-300"
+                                >
+                            </td>
                             <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ user.name }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ user.email }}</td>
                             <td class="px-6 py-4 text-sm">

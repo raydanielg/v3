@@ -3,6 +3,11 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GeographicalController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\AdminSchoolController;
+use App\Http\Controllers\AdminSettingController;
+use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\BackupController;
+use App\Http\Controllers\AdminActivityController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -26,6 +31,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'user' => auth()->user(),
         ]);
     })->name('admin.dashboard');
+
+    // Admin Profile
+    Route::get('/admin/profile', function () {
+        return Inertia::render('Admin/Profile/Index', [
+            'user' => auth()->user(),
+        ]);
+    })->name('admin.profile');
 
     // User Dashboard - for school_manager, district_manager, teacher, student
     Route::get('/dashboard', function () {
@@ -63,11 +75,39 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     Route::patch('/districts/{district}', [GeographicalController::class, 'updateDistrict'])->name('admin.districts.update');
     Route::delete('/districts/{district}', [GeographicalController::class, 'deleteDistrict'])->name('admin.districts.delete');
 
+    // Reports
+    Route::get('/reports', [ReportsController::class, 'index'])->name('admin.reports.index');
+
+    // Schools
+    Route::get('/schools', [AdminSchoolController::class, 'index'])->name('admin.schools.index');
+    Route::post('/schools', [AdminSchoolController::class, 'store'])->name('admin.schools.store');
+    Route::patch('/schools/{school}', [AdminSchoolController::class, 'update'])->name('admin.schools.update');
+    Route::delete('/schools/{school}', [AdminSchoolController::class, 'destroy'])->name('admin.schools.destroy');
+
+    // Settings
+    Route::get('/settings/general', [AdminSettingController::class, 'general'])->name('admin.settings.general');
+    Route::patch('/settings/general', [AdminSettingController::class, 'updateGeneral'])->name('admin.settings.general.update');
+    Route::get('/settings/smtp', [AdminSettingController::class, 'smtp'])->name('admin.settings.smtp');
+    Route::patch('/settings/smtp', [AdminSettingController::class, 'updateSmtp'])->name('admin.settings.smtp.update');
+    Route::post('/settings/smtp/test', [AdminSettingController::class, 'testSmtp'])->name('admin.settings.smtp.test');
+    Route::get('/settings/security', [AdminSettingController::class, 'security'])->name('admin.settings.security');
+    Route::get('/settings/health', [AdminSettingController::class, 'health'])->name('admin.settings.health');
+    Route::post('/settings/health/clear-cache', [AdminSettingController::class, 'clearCache'])->name('admin.settings.health.clear-cache');
+
+    // Backups
+    Route::get('/settings/backup', [BackupController::class, 'index'])->name('admin.settings.backup');
+    Route::post('/settings/backup', [BackupController::class, 'store'])->name('admin.settings.backup.store');
+    Route::get('/settings/backup/{backup}/download', [BackupController::class, 'download'])->name('admin.settings.backup.download');
+
+    // Activity Logs
+    Route::get('/activitylogs', [AdminActivityController::class, 'index'])->name('admin.activitylogs');
+
     // Users
     Route::get('/users', [AdminUserController::class, 'index'])->name('admin.users.index');
     Route::post('/users', [AdminUserController::class, 'store'])->name('admin.users.store');
     Route::patch('/users/{user}', [AdminUserController::class, 'update'])->name('admin.users.update');
     Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
+    Route::delete('/users', [AdminUserController::class, 'bulkDestroy'])->name('admin.users.bulk-destroy');
 });
 
 require __DIR__.'/auth.php';

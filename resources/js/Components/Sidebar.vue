@@ -111,8 +111,9 @@ const navigation = [
         name: 'Profile',
         icon: 'account_circle',
         submenu: [
-            { name: 'My Profile', href: route('profile.show') },
-            { name: 'Account Settings', href: route('profile.show') },
+            { name: 'My Profile', href: route('admin.profile') },
+            { name: 'Account Settings', href: route('admin.profile') },
+            { name: 'Activity Logs', href: route('admin.activitylogs') },
         ],
     },
 ];
@@ -123,8 +124,8 @@ const adminNavigation = [
         icon: 'admin_panel_settings',
         submenu: [
             { name: 'Overview', href: route('admin.dashboard') },
-            { name: 'System Health', href: route('admin.dashboard') },
-            { name: 'Activity Log', href: route('admin.dashboard') },
+            { name: 'System Health', href: route('admin.settings.health') },
+            { name: 'Activity Log', href: route('admin.activitylogs') },
         ],
     },
     {
@@ -140,27 +141,29 @@ const adminNavigation = [
         name: 'School Management',
         icon: 'domain',
         submenu: [
-            { name: 'All Schools', href: route('admin.dashboard') },
-            { name: 'Add School', href: route('admin.dashboard') },
-            { name: 'School Reports', href: route('admin.dashboard') },
+            { name: 'All Schools', href: route('admin.schools.index') },
+            { name: 'Add School', href: route('admin.schools.index') },
+            { name: 'School Reports', href: route('admin.reports.index') },
         ],
     },
     {
         name: 'System Settings',
         icon: 'settings',
         submenu: [
-            { name: 'General Settings', href: route('admin.dashboard') },
-            { name: 'Security', href: route('admin.dashboard') },
-            { name: 'Backup & Restore', href: route('admin.dashboard') },
+            { name: 'General Settings', href: route('admin.settings.general') },
+            { name: 'SMTP Settings', href: route('admin.settings.smtp') },
+            { name: 'System Health', href: route('admin.settings.health') },
+            { name: 'Security', href: route('admin.settings.security') },
+            { name: 'Backup & Restore', href: route('admin.settings.backup') },
         ],
     },
     {
         name: 'Reports',
         icon: 'description',
         submenu: [
-            { name: 'System Reports', href: route('admin.dashboard') },
-            { name: 'User Analytics', href: route('admin.dashboard') },
-            { name: 'Exam Statistics', href: route('admin.dashboard') },
+            { name: 'Overview', href: route('admin.reports.index') },
+            { name: 'School Ranking', href: route('admin.reports.index') },
+            { name: 'Subject & Ward Reports', href: route('admin.reports.index') },
         ],
     },
     {
@@ -175,8 +178,8 @@ const adminNavigation = [
         name: 'Profile',
         icon: 'account_circle',
         submenu: [
-            { name: 'My Profile', href: route('profile.show') },
-            { name: 'Account Settings', href: route('profile.show') },
+            { name: 'My Profile', href: route('admin.profile') },
+            { name: 'Account Settings', href: route('admin.profile') },
         ],
     },
 ];
