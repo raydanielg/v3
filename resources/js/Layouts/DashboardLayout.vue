@@ -1,11 +1,42 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import Sidebar from '@/Components/Sidebar.vue';
 
 const page = usePage();
 const sidebarOpen = ref(false);
 const userMenuOpen = ref(false);
+const notificationsOpen = ref(false);
+const isAdmin = computed(() => page.props.auth.user?.role === 'admin');
+
+const notifications = ref([
+    {
+        id: 1,
+        type: 'success',
+        title: 'Admin signed in',
+        message: 'You signed in successfully',
+        icon: 'login',
+        time: 'Just now',
+    },
+    {
+        id: 2,
+        type: 'info',
+        title: 'New user created account',
+        message: 'A new user has registered in the system',
+        icon: 'person_add',
+        time: '5 min ago',
+    },
+    {
+        id: 3,
+        type: 'warning',
+        title: 'Multiple failed logins',
+        message: '5 failed login attempts detected',
+        icon: 'warning',
+        time: '12 min ago',
+    },
+]);
+
+const unreadCount = ref(notifications.value.length);
 
 const toggleSidebar = () => {
     sidebarOpen.value = !sidebarOpen.value;
@@ -13,6 +44,14 @@ const toggleSidebar = () => {
 
 const toggleUserMenu = () => {
     userMenuOpen.value = !userMenuOpen.value;
+};
+
+const toggleNotifications = () => {
+    notificationsOpen.value = !notificationsOpen.value;
+
+    if (notificationsOpen.value) {
+        unreadCount.value = 0;
+    }
 };
 </script>
 
@@ -54,11 +93,75 @@ const toggleUserMenu = () => {
                             </div>
                         </div>
 
-                        <!-- Notifications -->
-                        <button class="relative inline-flex items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-900 p-2">
-                            <span class="material-icons text-2xl">notifications</span>
-                            <span class="absolute top-1 right-1 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">3</span>
-                        </button>
+                        <!-- Notifications (admin only) -->
+                        <div v-if="isAdmin" class="relative">
+                            <button
+                                @click="toggleNotifications"
+                                class="relative inline-flex items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-900 p-2"
+                            >
+                                <span class="material-icons text-2xl">notifications</span>
+                                <span
+                                    v-if="unreadCount > 0"
+                                    class="absolute top-1 right-1 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full"
+                                >
+                                    {{ unreadCount }}
+                                </span>
+                            </button>
+
+                            <Transition
+                                enter-active-class="transition ease-out duration-100"
+                                enter-from-class="transform opacity-0 scale-95"
+                                enter-to-class="transform opacity-100 scale-100"
+                                leave-active-class="transition ease-in duration-75"
+                                leave-from-class="transform opacity-100 scale-100"
+                                leave-to-class="transform opacity-0 scale-95"
+                            >
+                                <div
+                                    v-if="notificationsOpen"
+                                    class="absolute right-0 mt-2 w-80 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 z-40"
+                                >
+                                    <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm font-semibold text-gray-900">Notifications</p>
+                                            <p class="text-xs text-gray-500">Latest system activity</p>
+                                        </div>
+                                        <span class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
+                                            <span class="material-icons text-[14px]">notifications_active</span>
+                                            Live
+                                        </span>
+                                    </div>
+                                    <div v-if="!notifications.length" class="px-4 py-6 text-xs text-gray-500">
+                                        No notifications yet.
+                                    </div>
+                                    <div v-else class="max-h-72 overflow-y-auto divide-y divide-gray-100 text-sm">
+                                        <div
+                                            v-for="item in notifications"
+                                            :key="item.id"
+                                            class="flex items-start gap-3 px-4 py-3 hover:bg-gray-50 transition-colors"
+                                        >
+                                            <div class="mt-1">
+                                                <span
+                                                    class="material-icons text-base"
+                                                    :class="{
+                                                        'text-emerald-500': item.type === 'success',
+                                                        'text-blue-500': item.type === 'info',
+                                                        'text-amber-500': item.type === 'warning',
+                                                        'text-red-500': item.type === 'error',
+                                                    }"
+                                                >
+                                                    {{ item.icon }}
+                                                </span>
+                                            </div>
+                                            <div class="flex-1">
+                                                <p class="text-xs font-semibold text-gray-900">{{ item.title }}</p>
+                                                <p class="text-[11px] text-gray-500">{{ item.message }}</p>
+                                                <p class="text-[10px] text-gray-400 mt-1">{{ item.time }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Transition>
+                        </div>
 
                         <!-- User menu -->
                         <div class="relative">
